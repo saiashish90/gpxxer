@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, Button, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import GpsStatsCard from "../../components/GpsStatsCard";
+import TrackingMap from "../../components/TrackingMap";
 import { useLocation } from "../../hooks/useLocation";
 import { homeStyles } from "../../styles/homeStyles";
+
 
 export default function HomeScreen() {
   const { 
@@ -11,6 +13,7 @@ export default function HomeScreen() {
     speed,
     journeyAverageSpeed,
     journeyStartTime,
+    trackPoints,
     isTracking,
     requestPermission, 
     startTracking,
@@ -39,7 +42,11 @@ export default function HomeScreen() {
           <Button title="Grant Location Permission" onPress={requestPermission} />
         </View>
       ) : (
-        <>
+        <ScrollView 
+          style={homeStyles.scrollView}
+          contentContainerStyle={homeStyles.scrollViewContent}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Tracking Controls - Always visible when permission granted */}
           <View style={homeStyles.trackingControls}>
             <Text style={homeStyles.trackingTitle}>Bike Tracking</Text>
@@ -72,15 +79,26 @@ export default function HomeScreen() {
             )}
           </View>
 
-          {/* GPS Stats Card */}
-          <GpsStatsCard 
-            location={location}
-            speed={speed}
-            journeyAverageSpeed={journeyAverageSpeed}
-            journeyStartTime={journeyStartTime}
-            isTracking={isTracking}
-          />
-        </>
+          {/* Map - Only show when tracking is active */}
+          {isTracking && (
+            <TrackingMap
+              currentLocation={location}
+              trackPoints={trackPoints}
+              isTracking={isTracking}
+            />
+          )}
+
+          {/* GPS Stats Card - Only show when tracking is active */}
+          {isTracking && (
+            <GpsStatsCard 
+              location={location}
+              speed={speed}
+              journeyAverageSpeed={journeyAverageSpeed}
+              journeyStartTime={journeyStartTime}
+              isTracking={isTracking}
+            />
+          )}
+        </ScrollView>
       )}
     </View>
   );

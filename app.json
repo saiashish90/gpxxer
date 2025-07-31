@@ -21,6 +21,12 @@
       "expo-router",
       [
         "expo-splash-screen"
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location for bike tracking."
+        }
       ]
     ],
     "experiments": {

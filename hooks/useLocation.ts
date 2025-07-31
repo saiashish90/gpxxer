@@ -7,6 +7,11 @@ export interface LocationData {
   speed: number | null; // Speed in m/s from GPS
   journeyAverageSpeed: number | null; // Average speed of entire journey
   journeyStartTime: number | null; // Journey start timestamp
+  trackPoints: Array<{
+    latitude: number;
+    longitude: number;
+    timestamp: number;
+  }>;
   isTracking: boolean;
 }
 
@@ -18,6 +23,11 @@ export const useLocation = () => {
   const [speed, setSpeed] = useState<number | null>(null);
   const [journeyAverageSpeed, setJourneyAverageSpeed] = useState<number | null>(null);
   const [journeyStartTimeState, setJourneyStartTimeState] = useState<number | null>(null);
+  const [trackPoints, setTrackPoints] = useState<Array<{
+    latitude: number;
+    longitude: number;
+    timestamp: number;
+  }>>([]);
   
   // Refs for tracking calculations
   const previousLocation = useRef<Location.LocationObject | null>(null);
@@ -96,6 +106,13 @@ export const useLocation = () => {
           
           if (isTracking && currentSpeed && currentSpeed > 0) {
             updateJourneyAverageSpeed(currentSpeed);
+            
+            // Add track point
+            setTrackPoints(prev => [...prev, {
+              latitude: newLocation.coords.latitude,
+              longitude: newLocation.coords.longitude,
+              timestamp: newLocation.timestamp,
+            }]);
           }
           
           previousLocation.current = newLocation;
@@ -114,6 +131,7 @@ export const useLocation = () => {
     setSpeed(null);
     setJourneyAverageSpeed(null);
     setJourneyStartTimeState(null);
+    setTrackPoints([]);
     previousLocation.current = null;
     const startTime = Date.now();
     journeyStartTime.current = startTime;
@@ -146,6 +164,7 @@ export const useLocation = () => {
     speed,
     journeyAverageSpeed,
     journeyStartTime: journeyStartTimeState,
+    trackPoints,
     isTracking,
     requestPermission,
     startTracking,

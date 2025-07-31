@@ -5,6 +5,12 @@ export const homeStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    paddingBottom: 20,
+  },
   permissionContainer: {
     flex: 1,
     justifyContent: 'center',
