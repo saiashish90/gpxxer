@@ -9,13 +9,6 @@ export default function TabLayout() {
           title: 'Home',
         }}
       />
-      {/* another screenw with name "settings" */}
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-        }}
-      />
     </Tabs>
   );
 } 
